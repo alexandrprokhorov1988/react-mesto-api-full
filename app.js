@@ -5,6 +5,8 @@ const rateLimit = require('express-rate-limit');
 const helmet = require('helmet');
 const cards = require('./routes/cards');
 const users = require('./routes/users');
+const login = require('./routes/login');
+const register = require('./routes/register');
 
 const app = express();
 const { PORT = 3000 } = process.env;
@@ -31,6 +33,8 @@ app.use((req, res, next) => {
 });
 app.use('/users', users);
 app.use('/cards', cards);
+app.use('/signin', login);
+app.use('/signup', register);
 app.use((req, res) => {
   res.status(404).json({ message: 'Запрашиваемый ресурс не найден' });
 });
