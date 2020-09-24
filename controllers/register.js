@@ -5,6 +5,7 @@ const ERROR_CODE = 400;
 
 module.exports.createUser = (req, res) => {
   const { name, about, avatar, email, password } = req.body;
+
   bcrypt.hash(password, 10)
     .then((hash) => User.create({ name, about, avatar, email, password: hash }))
     .then((user) => res.send(user))

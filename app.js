@@ -3,12 +3,15 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const rateLimit = require('express-rate-limit');
 const helmet = require('helmet');
+const cookieParser = require('cookie-parser');
 const cards = require('./routes/cards');
 const users = require('./routes/users');
 const login = require('./routes/login');
 const register = require('./routes/register');
+const auth = require('./middlewares/auth');
 
 const app = express();
+
 const { PORT = 3000 } = process.env;
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000,
@@ -21,18 +24,14 @@ mongoose.connect('mongodb://localhost:27017/mestodb', {
   useFindAndModify: false,
 });
 
+app.use(cookieParser());
 app.use(limiter);
 app.use(helmet());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use((req, res, next) => {
-  req.user = {
-    _id: '5f494c90378ab92274b76a01',
-  };
-  next();
-});
-app.use('/users', users);
-app.use('/cards', cards);
+
+app.use('/users', auth, users);
+app.use('/cards', auth, cards);
 app.use('/signin', login);
 app.use('/signup', register);
 app.use((req, res) => {
