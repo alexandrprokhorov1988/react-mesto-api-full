@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const validator = require('validator');
 
 const cardSchema = new mongoose.Schema({
   name: {
@@ -11,7 +12,7 @@ const cardSchema = new mongoose.Schema({
     type: String,
     required: [true, 'необходимо заполнить поле avatar'],
     validate: {
-      validator: (v) => /^https?:\/\/(www.)?[a-z0-9\-\\/]+\.[a-z]{2,3}[a-z\\/]*#?$/gi.test(v),
+      validator: (str) => validator.isURL(str),
       message: (props) => `${props.value} некорректный url`,
     },
   },

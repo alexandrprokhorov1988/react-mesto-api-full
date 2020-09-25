@@ -1,54 +1,32 @@
 const User = require('../models/user');
+const NotFoundError = require('../errors/not-found-err');
 
-const ERROR_CODE = 400;
-
-module.exports.getUsers = (req, res) => {
+module.exports.getUsers = (req, res, next) => {
   User.find({})
-    .then((users) => res.send(users))
-    .catch(() => res.status(500).json({ message: 'На сервере произошла ошибка' }));
-};
-
-module.exports.getUser = (req, res) => {
-  User.findOne({ _id: req.params.userId })
-    .orFail(() => new Error(404))
+    .orFail(() => new NotFoundError('Записи отсутсвуют'))
     .then((user) => res.send(user))
-    .catch((err) => {
-      if (err.message === '404') {
-        res.status(404).json({ message: 'Нет пользователя с таким id' });
-        return;
-      }
-      res.status(500).json({ message: 'На сервере произошла ошибка' });
-    });
+    .catch(next);
 };
 
-module.exports.editUserInfo = (req, res) => {
+module.exports.getUser = (req, res, next) => {
+  User.findOne({ _id: req.params.userId })
+    .orFail(() => new NotFoundError('Нет пользователя с таким id'))
+    .then((user) => res.send(user))
+    .catch(next);
+};
+
+module.exports.editUserInfo = (req, res, next) => {
   const { name, about } = req.body;
   User.findOneAndUpdate({ _id: req.user._id }, { name, about }, { new: true, runValidators: true })
-    .orFail(() => new Error(404))
+    .orFail(() => new NotFoundError('Нет пользователя с таким id'))
     .then((user) => res.send(user))
-    .catch((err) => {
-      if (err.name === 'ValidationError') {
-        res.status(ERROR_CODE).json({ message: 'Введены некорректные данные' });
-      } else if (err.message === '404') {
-        res.status(404).json({ message: 'Нет пользователя с таким id' });
-      } else {
-        res.status(500).json({ message: 'На сервере произошла ошибка' });
-      }
-    });
+    .catch(next);
 };
 
-module.exports.editUserAvatar = (req, res) => {
+module.exports.editUserAvatar = (req, res, next) => {
   const { avatar } = req.body;
   User.findOneAndUpdate({ _id: req.user._id }, { avatar }, { new: true, runValidators: true })
-    .orFail(() => new Error(404))
+    .orFail(() => new NotFoundError('Нет пользователя с таким id'))
     .then((user) => res.send(user))
-    .catch((err) => {
-      if (err.name === 'ValidationError') {
-        res.status(ERROR_CODE).json({ message: 'Введены некорректные данные' });
-      } else if (err.message === '404') {
-        res.status(404).json({ message: 'Нет пользователя с таким id' });
-      } else {
-        res.status(500).json({ message: 'На сервере произошла ошибка' });
-      }
-    });
+    .catch(next);
 };

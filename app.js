@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const rateLimit = require('express-rate-limit');
 const helmet = require('helmet');
 const cookieParser = require('cookie-parser');
+const { errors } = require('celebrate');
 const cards = require('./routes/cards');
 const users = require('./routes/users');
 const login = require('./routes/login');
@@ -27,6 +28,7 @@ mongoose.connect('mongodb://localhost:27017/mestodb', {
 app.use(cookieParser());
 app.use(limiter);
 app.use(helmet());
+app.use(errors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -36,6 +38,17 @@ app.use('/signin', login);
 app.use('/signup', register);
 app.use((req, res) => {
   res.status(404).json({ message: 'Запрашиваемый ресурс не найден' });
+});
+
+app.use((err, req, res) => {
+  const { statusCode = 500, message } = err;
+  res
+    .status(statusCode)
+    .send({
+      message: statusCode === 500
+        ? 'На сервере произошла ошибка'
+        : message,
+    });
 });
 
 app.listen(PORT, () => {
