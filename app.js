@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
@@ -10,6 +11,7 @@ const users = require('./routes/users');
 const login = require('./routes/login');
 const register = require('./routes/register');
 const auth = require('./middlewares/auth');
+const { requestLogger, errorLogger } = require('./middlewares/logger');
 
 const app = express();
 
@@ -28,21 +30,33 @@ mongoose.connect('mongodb://localhost:27017/mestodb', {
 app.use(cookieParser());
 app.use(limiter);
 app.use(helmet());
-app.use(errors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.use('/users', auth, users);
-app.use('/cards', auth, cards);
+app.use(requestLogger);
+
+app.use((req, res, next) => {
+  req.user = {
+    _id: '5f494c90378ab92274b76a01',
+  };
+
+  next();
+});
+
+app.use('/users',/* auth,*/ users);
+app.use('/cards', /*auth,*/ cards);
 app.use('/signin', login);
 app.use('/signup', register);
+app.use(errors());
+app.use(errorLogger);
+
 app.use((req, res) => {
   res.status(404).json({ message: 'Запрашиваемый ресурс не найден' });
 });
 
-app.use((err, req, res) => {
+app.use((err, req, res, next) => { // todo next должен быть обязательно, прочитать
   const { statusCode = 500, message } = err;
-  res
+  return res
     .status(statusCode)
     .send({
       message: statusCode === 500

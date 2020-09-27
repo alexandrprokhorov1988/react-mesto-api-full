@@ -11,11 +11,10 @@ router.post('/', celebrate({
     name: Joi
       .string()
       .required()
-      .alphanum()
       .min(2)
       .max(30),
     link: Joi.string().required().uri(),
-  }),
+  }).unknown(true),
 }), createCard);
 
 router.delete('/:cardId', celebrate({

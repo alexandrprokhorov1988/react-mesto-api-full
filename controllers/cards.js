@@ -17,9 +17,10 @@ module.exports.createCard = (req, res, next) => {
 };
 
 module.exports.deleteCard = (req, res, next) => {
-  Card.deleteOne({ _id: req.params.cardId })
+  const owner = req.user._id;
+  Card.deleteOne({ _id: req.params.cardId, owner })
     .orFail(() => new NotFoundError('Нет карточки с таким id'))
-    .then((card) => res.send(card))
+    .then((item) => res.send(item))
     .catch(next);
 };
 
