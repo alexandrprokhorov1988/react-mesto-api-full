@@ -34,17 +34,13 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(requestLogger);
-
-app.use((req, res, next) => {
-  req.user = {
-    _id: '5f494c90378ab92274b76a01',
-  };
-
-  next();
+app.use('/users', auth, users);
+app.use('/cards', auth, cards);
+app.get('/crash-test', () => {
+  setTimeout(() => {
+    throw new Error('Сервер сейчас упадёт');
+  }, 0);
 });
-
-app.use('/users',/* auth,*/ users);
-app.use('/cards', /*auth,*/ cards);
 app.use('/signin', login);
 app.use('/signup', register);
 app.use(errors());

@@ -1,11 +1,21 @@
-const bcrypt = require('bcrypt');
 const User = require('../models/user');
+const BadRequestError = require('../errors/bad-reques-err');
 
 module.exports.createUser = (req, res, next) => {
-  const { name, about, avatar, email, password } = req.body;
+  const {
+    name = 'Жак-Ив Кусто',
+    about = 'Исследователь океана',
+    avatar = 'https://kaskad.tv/images/2020/foto_zhak_iv_kusto__-_interesnie_fakti_20190810_2078596433.jpg',
+    email,
+    password,
+  } = req.body;
 
-  bcrypt.hash(password, 10)
-    .then((hash) => User.create({ name, about, avatar, email, password: hash }))
-    .then((user) => res.send(user))
+  return User.registerUser(name, about, avatar, email, password)
+    .then((user) => {
+      if (!user) {
+        throw new BadRequestError('Ошибка регистрации');
+      }
+      res.send(user);
+    })
     .catch(next);
 };

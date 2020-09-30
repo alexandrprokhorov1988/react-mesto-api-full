@@ -26,7 +26,7 @@ const userSchema = new mongoose.Schema({
   },
   email: {
     type: String,
-    require: true,
+    require: [true, 'необходимо заполнить поле email'],
     unique: true,
     validate: {
       validator: (str) => validator.isEmail(str),
@@ -57,6 +57,15 @@ userSchema.statics.findUserByCredentials = function (email, password) {
           return user;
         });
     });
+};
+
+userSchema.statics.registerUser = function (name, about, avatar, email, password) {
+  return bcrypt.hash(password, 10)
+    .then((hash) => this.create({
+      name, about, avatar, email, password: hash,
+    })
+      .then((user) => user)
+      .catch(() => Promise.reject(new BadRequestError('Email занят'))));
 };
 
 module.exports = mongoose.model('user', userSchema);
