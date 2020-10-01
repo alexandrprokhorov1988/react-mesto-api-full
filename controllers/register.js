@@ -15,7 +15,13 @@ module.exports.createUser = (req, res, next) => {
       if (!user) {
         throw new BadRequestError('Ошибка регистрации');
       }
-      res.send(user);
+      res.send({
+        _id: user._id,
+        name: user.name,
+        about: user.about,
+        avatar: user.avatar,
+        email: user.email,
+      });
     })
     .catch(next);
 };

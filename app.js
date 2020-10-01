@@ -50,7 +50,7 @@ app.use((req, res) => {
   res.status(404).json({ message: 'Запрашиваемый ресурс не найден' });
 });
 
-app.use((err, req, res, next) => { // todo next должен быть обязательно, прочитать
+app.use((err, req, res, next) => {
   const { statusCode = 500, message } = err;
   return res
     .status(statusCode)
