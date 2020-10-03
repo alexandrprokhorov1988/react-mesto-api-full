@@ -5,6 +5,7 @@ const bodyParser = require('body-parser');
 const rateLimit = require('express-rate-limit');
 const helmet = require('helmet');
 const cookieParser = require('cookie-parser');
+const cors = require('cors');
 const { errors } = require('celebrate');
 const cards = require('./routes/cards');
 const users = require('./routes/users');
@@ -27,6 +28,7 @@ mongoose.connect('mongodb://localhost:27017/mestodb', {
   useFindAndModify: false,
 });
 
+app.use(cors({ origin: true }));
 app.use(cookieParser());
 app.use(limiter);
 app.use(helmet());
