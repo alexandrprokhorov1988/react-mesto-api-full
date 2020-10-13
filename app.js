@@ -26,6 +26,7 @@ mongoose.connect('mongodb://localhost:27017/mestodb', {
   useNewUrlParser: true,
   useCreateIndex: true,
   useFindAndModify: false,
+  useUnifiedTopology: true,
 });
 
 app.use(cors({ origin: true }));
@@ -52,6 +53,7 @@ app.use((req, res) => {
   res.status(404).json({ message: 'Запрашиваемый ресурс не найден' });
 });
 
+// eslint-disable-next-line no-unused-vars
 app.use((err, req, res, next) => {
   const { statusCode = 500, message } = err;
   return res
