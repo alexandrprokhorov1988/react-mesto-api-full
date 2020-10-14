@@ -11,7 +11,7 @@ router.get('/', getUsers);
 
 router.get('/:userId', celebrate({
   params: Joi.object().keys({
-    userId: Joi.string().alphanum(),
+    userId: Joi.string(),
   }),
 }), getUser);
 
@@ -20,13 +20,11 @@ router.patch('/me', celebrate({
     name: Joi
       .string()
       .required()
-      .alphanum()
       .min(2)
       .max(30),
     about: Joi
       .string()
       .required()
-      .alphanum()
       .min(2)
       .max(30),
   }),
