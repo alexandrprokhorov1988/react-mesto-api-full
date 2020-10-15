@@ -9,8 +9,10 @@
 
 #### Описание
 Проект Место выполненный на React, Node.js, Mongodb Express. Включает полный стек.
-Репозиторий с фронтендом [Ссылка](https://github.com/alexandrprokhorov1988/react-mesto-auth)
 Статика раздаётся Nginx.
+* Репозиторий с фронтендом [Ссылка](https://github.com/alexandrprokhorov1988/react-mesto-auth).
+* IP-адрес сервера : 37.230.115.88
+* Домен API https://api.apro.students.nomoreparties.xyz/
 
 #### Запуск проекта
 * [Ссылка](https://apro.students.nomoreparties.xyz/)

@@ -1,5 +1,7 @@
 const Card = require('../models/card');
 const NotFoundError = require('../errors/not-found-err');
+const ForbiddenError = require('../errors/forbidden-err');
+const BadRequestError = require('../errors/bad-reques-err');
 
 module.exports.getCards = (req, res, next) => {
   Card.find({})
@@ -19,9 +21,15 @@ module.exports.createCard = (req, res, next) => {
 module.exports.deleteCard = (req, res, next) => {
   const owner = req.user._id;
   Card.deleteOne({ _id: req.params.cardId, owner })
-    .orFail(() => new NotFoundError('Нет карточки с таким id'))
+    .orFail(() => new ForbiddenError('Отказ в авторизации запроса'))
     .then((item) => res.send(item))
-    .catch(next);
+    .catch((err) => {
+      if (err.name === 'CastError') {
+        next(new BadRequestError('Невалидный id'));
+      } else {
+        next(err);
+      }
+    });
 };
 
 module.exports.likeCard = (req, res, next) => {
@@ -32,7 +40,13 @@ module.exports.likeCard = (req, res, next) => {
   )
     .orFail(() => new NotFoundError('Нет карточки с таким id'))
     .then((card) => res.send(card))
-    .catch(next);
+    .catch((err) => {
+      if (err.name === 'CastError') {
+        next(new BadRequestError('Невалидный id'));
+      } else {
+        next(err);
+      }
+    });
 };
 
 module.exports.dislikeCard = (req, res, next) => {
@@ -43,5 +57,11 @@ module.exports.dislikeCard = (req, res, next) => {
   )
     .orFail(() => new NotFoundError('Нет карточки с таким id'))
     .then((card) => res.send(card))
-    .catch(next);
+    .catch((err) => {
+      if (err.name === 'CastError') {
+        next(new BadRequestError('Невалидный id'));
+      } else {
+        next(err);
+      }
+    });
 };
