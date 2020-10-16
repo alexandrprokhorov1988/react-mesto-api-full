@@ -17,6 +17,7 @@ const { requestLogger, errorLogger } = require('./middlewares/logger');
 const NotFoundError = require('./errors/not-found-err');
 
 const app = express();
+app.use(cors());
 
 const { PORT = 3000 } = process.env;
 const limiter = rateLimit({
@@ -31,7 +32,6 @@ mongoose.connect('mongodb://localhost:27017/mestodb', {
   useUnifiedTopology: true,
 });
 
-app.use(cors());
 app.use(cookieParser());
 app.use(limiter);
 app.use(helmet());
