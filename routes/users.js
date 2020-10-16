@@ -7,13 +7,13 @@ const { validateUrl } = require('../utils/validate');
 
 router.get('/', getUsers);
 
+router.get('/check', getUser);
+
 router.get('/:userId', celebrate({
   params: Joi.object().keys({
     userId: Joi.string().hex(),
   }),
 }), getUserById);
-
-router.get('/check', getUser);
 
 router.patch('/me', celebrate({
   body: Joi.object().keys({
