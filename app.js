@@ -11,6 +11,7 @@ const cards = require('./routes/cards');
 const users = require('./routes/users');
 const login = require('./routes/login');
 const register = require('./routes/register');
+const signOut = require('./routes/signOut');
 const auth = require('./middlewares/auth');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 const NotFoundError = require('./errors/not-found-err');
@@ -47,6 +48,7 @@ app.get('/crash-test', () => {
 });
 app.use('/signin', login);
 app.use('/signup', register);
+app.use('/signout', signOut);
 app.use(errors());
 app.use(errorLogger);
 
