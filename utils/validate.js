@@ -1,5 +1,5 @@
 module.exports.validateUrl = (value, helpers) => {
-  if (!/^(https?:\/\/)?([\w.]+)\.([a-z]{2,6}\.?)(\/[\w.]*)*\/?$/.test(value)) {
+  if (!/^(https?:\/\/)?([\w.]+)\.([a-z]{2,6}\.?)(\/[\w.-]*)*\/?$/.test(value)) {
     return helpers.message('Некорректный url');
   }
   return value;
