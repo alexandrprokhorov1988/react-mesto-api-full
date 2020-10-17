@@ -62,9 +62,11 @@ userSchema.statics.findUserByCredentials = function (email, password) {
     });
 };
 
-userSchema.statics.registerUser = function (email, password) {
+userSchema.statics.registerUser = function (name, about, avatar, email, password) {
   return bcrypt.hash(password, 10)
-    .then((hash) => this.create({ email, password: hash })
+    .then((hash) => this.create({
+      name, about, avatar, email, password: hash,
+    })
       .then((user) => user)
       .catch(() => Promise.reject(new BadRequestError('Email занят'))));
 };

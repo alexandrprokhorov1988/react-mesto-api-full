@@ -1,6 +1,5 @@
 const Card = require('../models/card');
 const NotFoundError = require('../errors/not-found-err');
-const ForbiddenError = require('../errors/forbidden-err');
 const BadRequestError = require('../errors/bad-reques-err');
 
 module.exports.getCards = (req, res, next) => {
@@ -21,7 +20,7 @@ module.exports.createCard = (req, res, next) => {
 module.exports.deleteCard = (req, res, next) => {
   const owner = req.user._id;
   Card.deleteOne({ _id: req.params.cardId, owner })
-    .orFail(() => new ForbiddenError('Отказ в авторизации запроса'))
+    .orFail(() => new NotFoundError('Нет карточки с таким id'))
     .then((item) => res.send(item))
     .catch((err) => {
       if (err.name === 'CastError') {

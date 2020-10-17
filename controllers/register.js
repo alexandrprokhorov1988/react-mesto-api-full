@@ -2,9 +2,11 @@ const User = require('../models/user');
 const BadRequestError = require('../errors/bad-reques-err');
 
 module.exports.createUser = (req, res, next) => {
-  const { email, password } = req.body;
+  const {
+    name, about, avatar, email, password,
+  } = req.body;
 
-  return User.registerUser(email, password)
+  return User.registerUser(name, about, avatar, email, password)
     .then((user) => {
       if (!user) {
         throw new BadRequestError('Ошибка регистрации');
