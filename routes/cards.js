@@ -11,6 +11,7 @@ router.post('/', celebrate({
   body: Joi.object().keys({
     name: Joi
       .string()
+      .trim(true)
       .required()
       .min(2)
       .max(30),

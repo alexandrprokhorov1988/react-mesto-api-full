@@ -7,7 +7,7 @@ const { validateUrl } = require('../utils/validate');
 
 router.get('/', getUsers);
 
-router.get('/check', getUser);
+router.get('/me', getUser);
 
 router.get('/:userId', celebrate({
   params: Joi.object().keys({
@@ -19,11 +19,13 @@ router.patch('/me', celebrate({
   body: Joi.object().keys({
     name: Joi
       .string()
+      .trim(true)
       .required()
       .min(2)
       .max(30),
     about: Joi
       .string()
+      .trim(true)
       .required()
       .min(2)
       .max(30),
