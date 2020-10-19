@@ -15,7 +15,7 @@ router.post('/', celebrate({
       .min(2)
       .max(30),
     link: Joi.string().required().custom(validateUrl, 'custom validation'),
-  }).unknown(true),
+  }),
 }), createCard);
 
 router.delete('/:cardId', celebrate({
