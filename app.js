@@ -36,15 +36,17 @@ const allowedCors = [
   'http://localhost:3000/',
 ];
 const corsOptions = {
-  origin: function (origin, callback) {
+  credentials: true,
+  origin(origin, callback) {
     if (allowedCors.indexOf(origin) !== -1) {
       callback(null, true);
     } else {
       callback(new Error('Not allowed by CORS'));
     }
   },
-}
-app.use(cors({ credentials: true, corsOptions }));
+};
+
+app.use(cors(corsOptions));
 app.use(cookieParser());
 app.use(limiter);
 app.use(helmet());
