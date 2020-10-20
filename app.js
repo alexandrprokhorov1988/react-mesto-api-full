@@ -31,32 +31,7 @@ mongoose.connect('mongodb://localhost:27017/mestodb', {
   useUnifiedTopology: true,
 });
 
-const allowedCors = [
-  'https://apro.students.nomoreparties.xyz',
-  'http://localhost:3000',
-];
-// const corsOptions = {
-//   credentials: true,
-//   origin(origin, callback) {
-//     if (allowedCors.indexOf(origin) !== -1) {
-//       callback(null, true);
-//     } else {
-//       callback(new Error('Not allowed by CORS'));
-//     }
-//   },
-// };
-//
-// app.use(cors(corsOptions));
-
-app.use(function (req, res, next) {
-  const { origin } = req.headers;
-  if (allowedCors.includes(origin)) {
-    res.header('Access-Control-Allow-Origin', origin);
-  }
-
-  next();
-});
-
+app.use(cors({ credentials: true, origin: 'https://apro.students.nomoreparties.xyz' }));
 app.use(cookieParser());
 app.use(limiter);
 app.use(helmet());
