@@ -33,7 +33,7 @@ mongoose.connect('mongodb://localhost:27017/mestodb', {
 
 const allowedCors = [
   'https://apro.students.nomoreparties.xyz',
-  'http://localhost:3000/',
+  'http://localhost:3000',
 ];
 const corsOptions = {
   credentials: true,
