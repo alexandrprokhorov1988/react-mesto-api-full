@@ -32,7 +32,7 @@ mongoose.connect('mongodb://localhost:27017/mestodb', {
 });
 
 app.use(cors({ credentials: true, origin: 'http://localhost:3000/' }));
-app.use((req, res, next) => {
+app.use(function (req, res, next) {
   res.header('Access-Control-Allow-Origin', 'http://localhost:3000/');
   res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
   res.header('Access-Control-Allow-Methods', 'GET,HEAD,PUT,PATCH,POST,DELETE');
