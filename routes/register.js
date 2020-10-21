@@ -9,8 +9,8 @@ router.post('/', celebrate({
     name: Joi.string().min(2).max(30),
     about: Joi.string().min(2).max(30),
     avatar: Joi.string().custom(validateUrl, 'custom validation'),
-    email: Joi.string().required().email(),
-    password: Joi.string().required().custom(validatePassword, 'custom validation'),
+    email: Joi.string().required().email().trim(true),
+    password: Joi.string().required().trim(true).custom(validatePassword, 'custom validation'),
   }),
 }), createUser);
 
