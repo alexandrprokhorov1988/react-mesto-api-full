@@ -10,6 +10,19 @@ module.exports.getCards = (req, res, next) => {
     .catch(next);
 };
 
+module.exports.getCardById = (req, res, next) => {
+  Card.findOne({ _id: req.params.cardId })
+    .orFail(() => new NotFoundError('Нет карточки с таким id'))
+    .then((card) => res.send(card))
+    .catch((err) => {
+      if (err.name === 'CastError') {
+        next(new BadRequestError('Невалидный id'));
+      } else {
+        next(err);
+      }
+    });
+};
+
 module.exports.createCard = (req, res, next) => {
   const { name, link } = req.body;
   const owner = req.user._id;

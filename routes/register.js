@@ -1,8 +1,7 @@
 const router = require('express').Router();
 const { celebrate, Joi } = require('celebrate');
 const { createUser } = require('../controllers/register');
-const { validatePassword } = require('../utils/validate');
-const { validateUrl } = require('../utils/validate');
+const { validatePassword, validateUrl } = require('../utils/validate');
 
 router.post('/', celebrate({
   body: Joi.object().keys({

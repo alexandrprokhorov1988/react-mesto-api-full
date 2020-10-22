@@ -10,12 +10,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/alexandrprokhorov1988/express-mesto.git"
+    "url": "git+https://github.com/alexandrprokhorov1988/react-mesto-api-full.git"
   },
   "author": "Alexandr Prokhorov",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/alexandrprokhorov1988/express-mesto/issues"
+    "url": "https://github.com/alexandrprokhorov1988/react-mesto-api-full/issues"
   },
   "homepage": "./",
   "dependencies": {
