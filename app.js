@@ -6,7 +6,7 @@ const rateLimit = require('express-rate-limit');
 const helmet = require('helmet');
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
-const { errors } = require('celebrate');
+const { isCelebrateError } = require('celebrate');
 const cards = require('./routes/cards');
 const users = require('./routes/users');
 const login = require('./routes/login');
@@ -31,7 +31,7 @@ mongoose.connect('mongodb://localhost:27017/mestodb', {
   useUnifiedTopology: true,
 });
 
-app.use(cors({ credentials: true, origin: 'https://apro.students.nomoreparties.xyz' }));
+app.use(cors({ credentials: true }));
 app.use(cookieParser());
 app.use(limiter);
 app.use(helmet());
@@ -49,7 +49,7 @@ app.get('/crash-test', () => {
 app.use('/signin', login);
 app.use('/signup', register);
 app.use('/signout', signOut);
-app.use(errors());
+// app.use(errors());
 app.use(errorLogger);
 
 app.use(() => {
@@ -57,8 +57,21 @@ app.use(() => {
 });
 
 // eslint-disable-next-line no-unused-vars
+// app.use((err, req, res, next) => {
+//   const { statusCode = 500, message } = err;
+//   return res
+//     .status(statusCode)
+//     .send({
+//       message: statusCode === 500
+//         ? 'На сервере произошла ошибка'
+//         : message,
+//     });
+// });
+
+// eslint-disable-next-line no-unused-vars
 app.use((err, req, res, next) => {
-  const { statusCode = 500, message } = err;
+  const statusCode = isCelebrateError(err) ? 400 : err.statusCode || 500;
+  const message = isCelebrateError(err) ? err.details.get('body').details[0].message : err.message;
   return res
     .status(statusCode)
     .send({
